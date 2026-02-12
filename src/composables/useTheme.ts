@@ -1,24 +1,15 @@
-import { ref, onMounted } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 
+// Estado global para garantir sincronização entre componentes
 const isDark = ref(false);
-
-const updateTheme = () => {
-  if (isDark.value) {
-    document.documentElement.classList.add('dark');
-    localStorage.setItem('theme', 'dark');
-  } else {
-    document.documentElement.classList.remove('dark');
-    localStorage.setItem('theme', 'light');
-  }
-};
 
 export function useTheme() {
   const toggleTheme = () => {
     isDark.value = !isDark.value;
-    updateTheme();
   };
 
   const initTheme = () => {
+    // Verifica preferência salva ou do sistema
     const userTheme = localStorage.getItem('theme');
     const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
@@ -27,19 +18,28 @@ export function useTheme() {
     } else {
       isDark.value = false;
     }
-    updateTheme();
+    
+    // Aplica a classe inicial
+    updateDocumentClass();
   };
+
+  const updateDocumentClass = () => {
+    if (isDark.value) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
+  };
+
+  // Observa mudanças para persistir e atualizar DOM
+  watch(isDark, () => {
+    updateDocumentClass();
+  });
 
   onMounted(() => {
     initTheme();
-    
-    // Listen for system preference changes
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-      if (!localStorage.getItem('theme')) {
-        isDark.value = e.matches;
-        updateTheme();
-      }
-    });
   });
 
   return {

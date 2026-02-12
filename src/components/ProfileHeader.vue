@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import ThemeToggle from './ThemeToggle.vue';
+import SocialActionButtons from './SocialActionButtons.vue';
 </script>
 
 <template>
@@ -26,9 +27,10 @@ import ThemeToggle from './ThemeToggle.vue';
       </p>
       
       <!-- Toggle de Tema -->
-      <div class="mt-4 flex justify-center">
-        <ThemeToggle />
-      </div>
+      <ThemeToggle />
+
+      <!-- Botões de Ação Social (WhatsApp, Instagram, Agendar) -->
+      <SocialActionButtons />
     </div>
   </header>
 </template>
