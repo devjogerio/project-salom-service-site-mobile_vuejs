@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import SocialActionButtons from './SocialActionButtons.vue';
-import profileImage from '@/assets/profile.jpg';
+import profileImage from '@/assets/profile.jpeg';
 </script>
 
 <template>
