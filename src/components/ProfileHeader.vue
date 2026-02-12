@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import SocialActionButtons from './SocialActionButtons.vue';
+import profileImage from '@/assets/profile.jpg';
 </script>
 
 <template>
@@ -7,7 +8,7 @@ import SocialActionButtons from './SocialActionButtons.vue';
     <div class="relative mb-6">
       <div class="w-48 h-48 rounded-full border-[5px] border-pink-500 p-1.5 bg-white dark:bg-gray-800 shadow-xl overflow-hidden transition-colors duration-300">
         <img
-          src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1000&auto=format&fit=crop"
+          :src="profileImage"
           alt="Foto de Perfil"
           class="rounded-full w-full h-full object-cover"
         />

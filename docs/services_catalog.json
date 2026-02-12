@@ -1,0 +1,32 @@
+[
+  {
+    "id": "1",
+    "name": "Corte de Cabelo",
+    "description": "Corte moderno e personalizado para realçar sua beleza natural.",
+    "price": 80.0,
+    "duration": 60,
+    "category": "Cabelo",
+    "image": "https://images.unsplash.com/photo-1562322140-8baeececf3df?q=80&w=1000&auto=format&fit=crop",
+    "gallery": []
+  },
+  {
+    "id": "2",
+    "name": "Manicure Completa",
+    "description": "Cuidados essenciais para suas unhas com esmaltação premium.",
+    "price": 45.0,
+    "duration": 45,
+    "category": "Unhas",
+    "image": "https://images.unsplash.com/photo-1604654894610-df63bc536371?q=80&w=1000&auto=format&fit=crop",
+    "gallery": []
+  },
+  {
+    "id": "3",
+    "name": "Limpeza de Pele",
+    "description": "Tratamento profundo para renovar e hidratar sua pele.",
+    "price": 120.0,
+    "duration": 90,
+    "category": "Estética",
+    "image": "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=1000&auto=format&fit=crop",
+    "gallery": []
+  }
+]
