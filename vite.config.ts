@@ -6,6 +6,10 @@ import tailwindcss from '@tailwindcss/vite'
 // https://vitejs.dev/config/
 export default defineConfig({
   base: '/project-salom-service-site-mobile_vuejs/',
+  build: {
+    outDir: 'docs',
+    emptyOutDir: true
+  },
   plugins: [
     vue(),
     tailwindcss(),

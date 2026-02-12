@@ -8,7 +8,7 @@
  * 
  * Opções:
  *   dev       - Configura ambiente e inicia servidor de desenvolvimento
- *   prod      - Instala dependências, roda testes e gera build de produção
+ *   prod      - Instala dependências, roda testes e gera build de produção (agora em /docs)
  *   sync      - Sincroniza com git (pull). Use: sync "mensagem de commit" para push
  *   test      - Apenas roda os testes
  *   setup     - Apenas instala dependências (sem configuração de .env)
@@ -109,9 +109,15 @@ function runTests() {
 }
 
 function buildProd() {
-  log('INFO', 'Iniciando build de produção...');
+  log('INFO', 'Iniciando build de produção (output: docs/)...');
   if (runCommand('npm run build', 'Falha no build de produção')) {
-    log('SUCCESS', 'Build de produção concluído com sucesso.');
+    // Verificação de segurança: check docs/index.html
+    if (existsSync(resolve(PROJECT_DIR, 'docs', 'index.html'))) {
+      log('SUCCESS', 'Build de produção concluído com sucesso em /docs.');
+    } else {
+      log('ERROR', 'Build falhou: docs/index.html não encontrado.');
+      process.exit(1);
+    }
   } else {
     process.exit(1);
   }
@@ -159,7 +165,7 @@ Uso: node manage-project.js [OPÇÃO] [ARGS...]
 
 Opções:
   dev       - Configura ambiente e inicia servidor de desenvolvimento
-  prod      - Instala dependências, roda testes e gera build de produção
+  prod      - Instala dependências, roda testes e gera build de produção (em /docs)
   sync      - Sincroniza com git (pull). Use: sync "mensagem de commit" para push
   test      - Apenas roda os testes
   setup     - Apenas instala dependências (sem .env)
