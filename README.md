@@ -21,7 +21,7 @@ Bem-vindo ao repositório oficial da versão Vue.js do site mobile da Salom Beau
 
 1. Clone o repositório:
    ```bash
-   git clone https://github.com/rogachdev/project-salom-service-site-mobile_vuejs.git
+   git clone https://github.com/devjogerio/project-salom-service-site-mobile_vuejs.git
    cd project-salom-service-site-mobile_vuejs
    ```
 
