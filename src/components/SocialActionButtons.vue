@@ -30,7 +30,7 @@ const scrollToAppointment = (e: Event) => {
 
       <!-- Instagram Button -->
       <a
-        href="https://instagram.com/cleiagomes_naildesigner"
+        href="https://www.instagram.com/cleiagomes_naildesigner?igsh=aGZmdXQzdHlxbHpl"
         target="_blank"
         rel="noopener noreferrer"
         class="flex-1 flex flex-col items-center justify-center py-3 px-2 rounded-xl bg-pink-50 dark:bg-pink-900/20 hover:bg-pink-100 dark:hover:bg-pink-900/30 border border-pink-100 dark:border-pink-800 transition-all duration-300 group shadow-sm hover:shadow-md cursor-pointer"

@@ -1,24 +1,20 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-import { Clock, Banknote, Info, Calendar } from 'lucide-vue-next';
+import { Clock, Banknote, Info, Calendar, Send } from 'lucide-vue-next';
 import type { Service } from '@/types/service';
 import ServiceModal from './ServiceModal.vue';
+import { createWhatsAppLink, getAppointmentMessage } from '@/utils/whatsapp';
 
 const props = defineProps<{
   service: Service;
 }>();
 
-const router = useRouter();
 const isModalOpen = ref(false);
 
-const scrollToAppointment = async () => {
-  // Atualiza a URL com o ID do serviço para pré-seleção
-  await router.push({ query: { serviceId: props.service.id }, hash: '#agendamento' });
-  
-  // Scroll manual caso o hash não funcione ou já esteja na página
-  const element = document.getElementById('agendamento');
-  element?.scrollIntoView({ behavior: 'smooth' });
+const openWhatsApp = () => {
+  const message = getAppointmentMessage(props.service.name);
+  const link = createWhatsAppLink(message);
+  window.open(link, '_blank');
 };
 </script>
 
@@ -63,15 +59,15 @@ const scrollToAppointment = async () => {
       <!-- Botões de Ação -->
       <div class="mt-4 flex gap-3">
         <button 
-          @click="scrollToAppointment"
-          class="flex-1 bg-pink-50 dark:bg-pink-900/20 text-pink-700 dark:text-pink-300 font-bold py-3 rounded-xl hover:bg-pink-100 dark:hover:bg-pink-900/40 transition-colors active:scale-95 text-sm flex items-center justify-center gap-1.5 cursor-pointer"
+          @click="openWhatsApp"
+          class="flex-1 bg-green-500 text-white font-bold py-3 rounded-xl hover:bg-green-600 transition-colors active:scale-95 text-sm flex items-center justify-center gap-1.5 cursor-pointer shadow-md hover:shadow-lg duration-300"
         >
-          <Calendar :size="16" />
+          <Send :size="16" />
           Agendar
         </button>
         <button 
           @click="isModalOpen = true"
-          class="flex-1 bg-pink-600 text-white font-bold py-3 rounded-xl hover:bg-pink-700 transition-colors active:scale-95 text-sm flex items-center justify-center gap-1.5 shadow-lg shadow-pink-200 dark:shadow-none cursor-pointer"
+          class="flex-1 bg-pink-50 dark:bg-pink-900/20 text-pink-700 dark:text-pink-300 font-bold py-3 rounded-xl hover:bg-pink-100 dark:hover:bg-pink-900/40 transition-colors active:scale-95 text-sm flex items-center justify-center gap-1.5 cursor-pointer border border-pink-100 dark:border-pink-800"
         >
           <Info :size="16" />
           Detalhes

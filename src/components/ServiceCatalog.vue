@@ -58,7 +58,7 @@ const setFilter = (cat: Category) => {
           v-for="cat in categories"
           :key="cat"
           @click="setFilter(cat)"
-          class="relative flex-shrink-0 font-bold transition-all duration-300 transform select-none rounded-xl cursor-pointer text-xs sm:text-sm py-1.5 px-3 sm:py-2 sm:px-4"
+          class="relative flex-shrink-0 font-bold transition-all duration-300 transform select-none rounded-xl cursor-pointer text-sm sm:text-base py-2 px-3.5 sm:py-2.5 sm:px-5"
           :class="filter === cat
             ? 'bg-pink-600 text-white shadow-md shadow-pink-200 dark:shadow-pink-900/20 ring-1 ring-pink-600 ring-offset-1 dark:ring-offset-gray-900 scale-105'
             : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:bg-pink-50 dark:hover:bg-pink-900/30 hover:text-pink-600 dark:hover:text-pink-400 hover:border-pink-200 dark:hover:border-pink-800 shadow-sm hover:-translate-y-0.5'"

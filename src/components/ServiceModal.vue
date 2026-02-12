@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref, computed, watch, onUnmounted } from 'vue';
-import { useRouter } from 'vue-router';
-import { X, ChevronLeft, ChevronRight, Clock, Banknote, Calendar, CheckCircle, AlertCircle } from 'lucide-vue-next';
+import { X, ChevronLeft, ChevronRight, Clock, Banknote, Calendar, CheckCircle, AlertCircle, Send } from 'lucide-vue-next';
 import type { Service } from '@/types/service';
+import { createWhatsAppLink, getAppointmentMessage } from '@/utils/whatsapp';
 
 const props = defineProps<{
   service: Service;
@@ -13,7 +13,6 @@ const emit = defineEmits<{
   (e: 'close'): void;
 }>();
 
-const router = useRouter();
 const currentImageIndex = ref(0);
 const isPaused = ref(false);
 let timer: ReturnType<typeof setInterval> | null = null;
@@ -70,17 +69,11 @@ const onClose = () => {
   emit('close');
 };
 
-const scrollToAppointment = async () => {
+const openWhatsApp = () => {
+  const message = getAppointmentMessage(props.service.name);
+  const link = createWhatsAppLink(message);
+  window.open(link, '_blank');
   onClose();
-  
-  // Atualiza a URL com o ID do serviço para pré-seleção
-  await router.push({ query: { serviceId: props.service.id }, hash: '#agendamento' });
-
-  // Pequeno delay para permitir que a modal feche antes de rolar
-  setTimeout(() => {
-    const element = document.getElementById('agendamento');
-    element?.scrollIntoView({ behavior: 'smooth' });
-  }, 100);
 };
 </script>
 
@@ -209,11 +202,11 @@ const scrollToAppointment = async () => {
 
         <div class="mt-auto pt-4 flex gap-3">
           <button 
-            @click="scrollToAppointment"
-            class="flex-1 bg-pink-50 dark:bg-pink-900/20 text-pink-700 dark:text-pink-300 font-bold py-3 rounded-xl hover:bg-pink-100 dark:hover:bg-pink-900/40 transition-colors active:scale-95 text-sm flex items-center justify-center gap-1.5 cursor-pointer"
+            @click="openWhatsApp"
+            class="flex-1 bg-green-500 text-white font-bold py-4 rounded-xl shadow-lg hover:bg-green-600 transition-all duration-300 active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
           >
-            <Calendar :size="16" />
-            Agendar
+            <Send :size="20" />
+            Agendar Agora
           </button>
           
           <button 

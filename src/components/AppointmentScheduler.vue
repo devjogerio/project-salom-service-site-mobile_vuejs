@@ -141,7 +141,7 @@ const handleSubmit = () => {
         <Loader2 v-if="loading" class="animate-spin" :size="20" />
         <span v-else class="flex items-center gap-2">
           <Send :size="20" />
-          Enviar agendamento no WhatsApp
+          Enviar Agendamento no WhatsApp
         </span>
       </button>
     </form>
