@@ -52,20 +52,16 @@ const setFilter = (cat: Category) => {
     <CategoryCarousel :key="filter" :services="services" :category="filter" />
 
     <!-- Sistema de Navegação (Filtros) -->
-    <div class="sticky top-0 z-30 bg-gray-50/95 dark:bg-gray-950/95 backdrop-blur-sm py-4 mb-8 -mx-4 px-4 border-b border-gray-100 dark:border-gray-800 md:static md:bg-transparent md:border-none md:p-0 md:mx-0 transition-all duration-300">
-      <div class="flex gap-3 overflow-x-auto pb-2 w-full justify-start md:justify-center no-scrollbar px-2">
+    <div class="sticky top-0 z-30 bg-gray-50/95 dark:bg-gray-950/95 backdrop-blur-sm py-3 mb-6 -mx-4 px-4 border-b border-gray-100 dark:border-gray-800 md:static md:bg-transparent md:border-none md:p-0 md:mx-0 transition-all duration-300">
+      <div class="flex gap-2 overflow-x-auto pb-1 w-full justify-start md:justify-center no-scrollbar px-1">
         <button
           v-for="cat in categories"
           :key="cat"
           @click="setFilter(cat)"
-          class="relative flex-shrink-0 font-bold transition-all duration-300 transform select-none rounded-2xl cursor-pointer"
+          class="relative flex-shrink-0 font-bold transition-all duration-300 transform select-none rounded-xl cursor-pointer text-xs sm:text-sm py-1.5 px-3 sm:py-2 sm:px-4"
           :class="filter === cat
-            ? 'bg-pink-600 text-white shadow-lg shadow-pink-200 dark:shadow-pink-900/20 ring-2 ring-pink-600 ring-offset-2 dark:ring-offset-gray-900 scale-105'
+            ? 'bg-pink-600 text-white shadow-md shadow-pink-200 dark:shadow-pink-900/20 ring-1 ring-pink-600 ring-offset-1 dark:ring-offset-gray-900 scale-105'
             : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:bg-pink-50 dark:hover:bg-pink-900/30 hover:text-pink-600 dark:hover:text-pink-400 hover:border-pink-200 dark:hover:border-pink-800 shadow-sm hover:-translate-y-0.5'"
-          :style="{
-            fontSize: 'clamp(0.875rem, 1.2vw, 1rem)',
-            padding: 'clamp(0.5rem, 1vw, 0.75rem) clamp(1rem, 2vw, 1.5rem)'
-          }"
         >
           {{ cat.charAt(0).toUpperCase() + cat.slice(1) }}
         </button>
