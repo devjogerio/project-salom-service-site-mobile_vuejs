@@ -25,7 +25,12 @@ export async function fetchServices(): Promise<Service[]> {
       duration: 60,
       category: "Cabelo",
       image: "https://images.unsplash.com/photo-1562322140-8baeececf3df?q=80&w=1000&auto=format&fit=crop",
-      gallery: []
+      gallery: [
+        "https://images.unsplash.com/photo-1562322140-8baeececf3df?q=80&w=1000&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1560869713-7d0a29430803?q=80&w=1000",
+        "https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?q=80&w=1000",
+        "https://images.unsplash.com/photo-1522337660859-02fbefca4702?q=80&w=1000"
+      ]
     },
     {
       id: "2",
@@ -35,7 +40,12 @@ export async function fetchServices(): Promise<Service[]> {
       duration: 45,
       category: "Unhas",
       image: "https://images.unsplash.com/photo-1604654894610-df63bc536371?q=80&w=1000&auto=format&fit=crop",
-      gallery: []
+      gallery: [
+        "https://images.unsplash.com/photo-1604654894610-df63bc536371?q=80&w=1000&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1632922267756-9b71242b1592?q=80&w=1000",
+        "https://images.unsplash.com/photo-1519014816548-bf5fe059e98b?q=80&w=1000",
+        "https://images.unsplash.com/photo-1522337360705-8b13d52043a9?q=80&w=1000"
+      ]
     },
     {
       id: "3",
@@ -45,7 +55,12 @@ export async function fetchServices(): Promise<Service[]> {
       duration: 90,
       category: "Estética",
       image: "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=1000&auto=format&fit=crop",
-      gallery: []
+      gallery: [
+        "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=1000&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?q=80&w=1000",
+        "https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?q=80&w=1000",
+        "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?q=80&w=1000"
+      ]
     }
   ];
 

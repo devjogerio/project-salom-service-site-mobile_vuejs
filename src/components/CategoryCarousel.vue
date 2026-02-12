@@ -24,7 +24,7 @@ const images = computed(() => {
     .slice(0, 5);
 });
 
-let timer: number | null = null;
+let timer: ReturnType<typeof setInterval> | null = null;
 
 const startRotation = () => {
   if (timer) clearInterval(timer);
@@ -69,8 +69,6 @@ onUnmounted(() => {
           :alt="`Destaque ${category} ${index + 1}`"
           class="object-cover w-full h-full"
         />
-        <!-- Overlay gradiente -->
-        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
       </div>
     </div>
 

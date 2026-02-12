@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
-import { X, ChevronLeft, ChevronRight } from 'lucide-vue-next';
+import { ref, computed, watch, onUnmounted } from 'vue';
+import { X, ChevronLeft, ChevronRight, Clock, Banknote } from 'lucide-vue-next';
 import type { Service } from '@/types/service';
 
 const props = defineProps<{
@@ -13,17 +13,15 @@ const emit = defineEmits<{
 }>();
 
 const currentImageIndex = ref(0);
+const isPaused = ref(false);
+let timer: ReturnType<typeof setInterval> | null = null;
 
-// Garantir que temos 3 imagens para o carrossel
+// Usar todas as imagens da galeria ou a imagem principal como fallback
 const images = computed(() => {
-  const imgs = props.service.gallery && props.service.gallery.length > 0 
-    ? props.service.gallery.slice(0, 3) 
-    : [props.service.image, props.service.image, props.service.image];
-
-  while (imgs.length < 3) {
-    imgs.push(props.service.image);
+  if (props.service.gallery && props.service.gallery.length > 0) {
+    return props.service.gallery;
   }
-  return imgs;
+  return [props.service.image];
 });
 
 const nextImage = () => {
@@ -34,7 +32,39 @@ const prevImage = () => {
   currentImageIndex.value = (currentImageIndex.value - 1 + images.value.length) % images.value.length;
 };
 
+const startRotation = () => {
+  stopRotation();
+  if (images.value.length <= 1) return;
+  
+  timer = setInterval(() => {
+    if (!isPaused.value) {
+      nextImage();
+    }
+  }, 4000);
+};
+
+const stopRotation = () => {
+  if (timer) {
+    clearInterval(timer);
+    timer = null;
+  }
+};
+
+watch(() => props.isOpen, (isOpen) => {
+  if (isOpen) {
+    currentImageIndex.value = 0;
+    startRotation();
+  } else {
+    stopRotation();
+  }
+});
+
+onUnmounted(() => {
+  stopRotation();
+});
+
 const onClose = () => {
+  stopRotation();
   emit('close');
 };
 </script>
@@ -47,48 +77,63 @@ const onClose = () => {
       aria-modal="true"
       aria-labelledby="modal-title"
     >
-      <!-- Header com Botão Fechar -->
-      <div class="relative h-80 w-full bg-gray-100 dark:bg-gray-800">
-        <img
-          :src="images[currentImageIndex]"
-          :alt="`${service.name} - Imagem ${currentImageIndex + 1}`"
-          class="object-cover w-full h-full"
-        />
+      <!-- Header com Carrossel -->
+      <div 
+        class="relative h-80 w-full bg-gray-100 dark:bg-gray-800 group"
+        @mouseenter="isPaused = true"
+        @mouseleave="isPaused = false"
+      >
+        <div class="relative w-full h-full overflow-hidden">
+          <div 
+            v-for="(img, index) in images"
+            :key="index"
+            class="absolute inset-0 transition-opacity duration-700 ease-in-out"
+            :class="index === currentImageIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'"
+          >
+            <img
+              :src="img"
+              :alt="`${service.name} - Imagem ${index + 1}`"
+              class="object-cover w-full h-full"
+            />
+          </div>
+        </div>
         
         <!-- Botão Fechar -->
         <button
           @click="onClose"
-          class="absolute top-4 right-4 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 transition-colors z-10 cursor-pointer"
+          class="absolute top-4 right-4 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 transition-colors z-20 cursor-pointer"
           aria-label="Fechar modal"
         >
           <X :size="20" />
         </button>
 
-        <!-- Controles do Carrossel -->
-        <button
-          @click.stop="prevImage"
-          class="absolute left-4 top-1/2 -translate-y-1/2 bg-white/30 hover:bg-white/50 text-white p-2 rounded-full backdrop-blur-md transition-all cursor-pointer"
-          aria-label="Imagem anterior"
-        >
-          <ChevronLeft :size="24" />
-        </button>
-        <button
-          @click.stop="nextImage"
-          class="absolute right-4 top-1/2 -translate-y-1/2 bg-white/30 hover:bg-white/50 text-white p-2 rounded-full backdrop-blur-md transition-all cursor-pointer"
-          aria-label="Próxima imagem"
-        >
-          <ChevronRight :size="24" />
-        </button>
+        <!-- Controles do Carrossel (só mostra se houver > 1 imagem) -->
+        <template v-if="images.length > 1">
+          <button
+            @click.stop="prevImage"
+            class="absolute left-4 top-1/2 -translate-y-1/2 bg-white/30 hover:bg-white/50 text-white p-2 rounded-full backdrop-blur-md transition-all cursor-pointer z-20 opacity-0 group-hover:opacity-100"
+            aria-label="Imagem anterior"
+          >
+            <ChevronLeft :size="24" />
+          </button>
+          <button
+            @click.stop="nextImage"
+            class="absolute right-4 top-1/2 -translate-y-1/2 bg-white/30 hover:bg-white/50 text-white p-2 rounded-full backdrop-blur-md transition-all cursor-pointer z-20 opacity-0 group-hover:opacity-100"
+            aria-label="Próxima imagem"
+          >
+            <ChevronRight :size="24" />
+          </button>
 
-        <!-- Indicadores -->
-        <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-          <div
-            v-for="(_, idx) in images"
-            :key="idx"
-            class="h-2 rounded-full transition-all"
-            :class="idx === currentImageIndex ? 'bg-white w-4' : 'bg-white/50 w-2'"
-          ></div>
-        </div>
+          <!-- Indicadores -->
+          <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-20">
+            <div
+              v-for="(_, idx) in images"
+              :key="idx"
+              class="h-1.5 rounded-full transition-all duration-300"
+              :class="idx === currentImageIndex ? 'bg-white w-6' : 'bg-white/50 w-1.5'"
+            ></div>
+          </div>
+        </template>
       </div>
 
       <!-- Conteúdo do Serviço -->

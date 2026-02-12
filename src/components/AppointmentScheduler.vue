@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { User, Phone, CheckCircle2, Loader2, AlertCircle } from 'lucide-vue-next';
+import { User, Phone, CheckCircle2, Loader2, AlertCircle, Check } from 'lucide-vue-next';
 import { createAppointment } from '@/services/beautyService';
 import { useServices } from '@/composables/useServices';
 import type { AppointmentResponse } from '@/types/appointment';
@@ -168,7 +168,10 @@ const resetForm = () => {
         class="w-full bg-pink-600 text-white font-bold py-4 rounded-xl shadow-lg shadow-pink-200 dark:shadow-none hover:bg-pink-700 transition-all duration-300 active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer"
       >
         <Loader2 v-if="loading" class="animate-spin" :size="20" />
-        <span v-else>Confirmar Agendamento</span>
+        <span v-else class="flex items-center gap-2">
+          <Check :size="20" />
+          Confirmar Agendamento
+        </span>
       </button>
     </form>
   </section>
