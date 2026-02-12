@@ -24,9 +24,9 @@ const setFilter = (cat: Category) => {
 </script>
 
 <template>
-  <section v-if="loading" id="catalogo" class="py-16 px-4 bg-gray-50 dark:bg-gray-900 flex justify-center items-center min-h-[400px] transition-colors duration-300">
+  <section v-if="loading" id="catalogo" class="py-14 px-4 bg-gray-50 dark:bg-gray-600 flex justify-center items-center min-h-[200px] transition-colors duration-300">
     <div class="flex flex-col items-center gap-4">
-      <Loader2 class="w-10 h-10 text-pink-600 dark:text-pink-400 animate-spin" />
+      <Loader2 class="w-10 h-10 text-pink-600 dark:text-pink-200 animate-spin" />
       <p class="text-gray-500 dark:text-gray-400 font-medium">Carregando serviços...</p>
     </div>
   </section>
