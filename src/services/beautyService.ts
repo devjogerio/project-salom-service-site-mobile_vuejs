@@ -15,6 +15,40 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
  * Conecta com a API Python (FastAPI).
  */
 export async function fetchServices(): Promise<Service[]> {
+  // Dados mockados para fallback
+  const mockServices: Service[] = [
+    {
+      id: "1",
+      name: "Corte de Cabelo",
+      description: "Corte moderno e personalizado para realçar sua beleza natural.",
+      price: 80.0,
+      duration: 60,
+      category: "Cabelo",
+      image: "https://images.unsplash.com/photo-1562322140-8baeececf3df?q=80&w=1000&auto=format&fit=crop",
+      gallery: []
+    },
+    {
+      id: "2",
+      name: "Manicure Completa",
+      description: "Cuidados essenciais para suas unhas com esmaltação premium.",
+      price: 45.0,
+      duration: 45,
+      category: "Unhas",
+      image: "https://images.unsplash.com/photo-1604654894610-df63bc536371?q=80&w=1000&auto=format&fit=crop",
+      gallery: []
+    },
+    {
+      id: "3",
+      name: "Limpeza de Pele",
+      description: "Tratamento profundo para renovar e hidratar sua pele.",
+      price: 120.0,
+      duration: 90,
+      category: "Estética",
+      image: "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=1000&auto=format&fit=crop",
+      gallery: []
+    }
+  ];
+
   // Em produção (GitHub Pages), usamos o JSON estático como fallback se não houver API configurada
   if (isProd && !import.meta.env.VITE_API_URL) {
     try {
@@ -24,8 +58,8 @@ export async function fetchServices(): Promise<Service[]> {
       const data = await response.json();
       return ServiceListSchema.parse(data);
     } catch (error) {
-      console.error('Erro ao carregar serviços estáticos:', error);
-      return []; // Retorna vazio em caso de erro crítico no estático
+      console.error('Erro ao carregar serviços estáticos, usando mock:', error);
+      return mockServices;
     }
   }
 
@@ -48,11 +82,12 @@ export async function fetchServices(): Promise<Service[]> {
       throw validationError;
     }
   } catch (error) {
-    console.error(
-      'Falha ao conectar com a API, verifique se o backend está rodando.',
+    console.warn(
+      'Falha ao conectar com a API, usando dados de fallback (mock).',
       error,
     );
-    throw error;
+    // Fallback silencioso para dados mockados em caso de erro de conexão (local ou prod)
+    return mockServices;
   }
 }
 

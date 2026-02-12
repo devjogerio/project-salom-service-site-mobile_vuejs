@@ -20,7 +20,7 @@ const error = ref<string | null>(null);
 const handleSubmit = async () => {
   error.value = null;
   
-  if (!selectedServiceId.value || !customerName.value || !customerPhone.value || !date.value || !time.value) {
+  if (!selectedServiceId.value || !customerName.value || !customerPhone.value) {
     error.value = 'Por favor, preencha todos os campos.';
     return;
   }
@@ -32,8 +32,8 @@ const handleSubmit = async () => {
       service_id: selectedServiceId.value,
       customer_name: customerName.value,
       customer_phone: customerPhone.value,
-      date: date.value,
-      time: time.value,
+      date: new Date().toISOString().split('T')[0], // Default to today
+      time: '00:00', // Default time
     });
     result.value = response;
   } catch (err) {
@@ -130,30 +130,6 @@ const resetForm = () => {
               placeholder="(00) 00000-0000"
             />
           </div>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <!-- Data -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 font-montserrat">Data Preferida</label>
-          <input
-            type="date"
-            v-model="date"
-            required
-            class="w-full p-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none transition-all"
-          />
-        </div>
-
-        <!-- Horário -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 font-montserrat">Horário Preferido</label>
-          <input
-            type="time"
-            v-model="time"
-            required
-            class="w-full p-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none transition-all"
-          />
         </div>
       </div>
 

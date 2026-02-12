@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import ThemeToggle from './ThemeToggle.vue';
-import SocialActionButtons from './SocialActionButtons.vue';
 </script>
 
 <template>
@@ -13,7 +12,6 @@ import SocialActionButtons from './SocialActionButtons.vue';
           class="rounded-full w-full h-full object-cover"
         />
       </div>
-      <div class="absolute bottom-3 right-3 bg-green-500 w-6 h-6 rounded-full border-[3px] border-white dark:border-gray-900" title="Online Agora"></div>
     </div>
 
     <div class="text-center space-y-1.5 w-full">
@@ -31,9 +29,6 @@ import SocialActionButtons from './SocialActionButtons.vue';
       <div class="mt-4 flex justify-center">
         <ThemeToggle />
       </div>
-
-      <!-- Botões de Ação Social (WhatsApp, Instagram, Agendar) -->
-      <SocialActionButtons />
     </div>
   </header>
 </template>

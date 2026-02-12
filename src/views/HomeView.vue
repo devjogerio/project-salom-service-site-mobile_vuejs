@@ -10,7 +10,7 @@ import ContactForm from '@/components/ContactForm.vue';
 <template>
   <div class="max-w-md mx-auto bg-white dark:bg-gray-900 min-h-screen shadow-2xl overflow-hidden flex flex-col transition-colors duration-300 relative">
     <!-- Theme Toggle Fixed Position -->
-    <div class="absolute top-4 right-4 z-50">
+    <div class="absolute top-5 right-5 z-50 transition-all duration-300">
       <ThemeToggle />
     </div>
 
