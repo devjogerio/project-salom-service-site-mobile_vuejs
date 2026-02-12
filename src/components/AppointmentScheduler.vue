@@ -1,88 +1,84 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import { User, Phone, CheckCircle2, Loader2, AlertCircle, Check } from 'lucide-vue-next';
-import { createAppointment } from '@/services/beautyService';
+import { ref, onMounted, watch } from 'vue';
+import { useRoute } from 'vue-router';
+import { User, Phone, CheckCircle2, Loader2, AlertCircle, Check, Send } from 'lucide-vue-next';
 import { useServices } from '@/composables/useServices';
-import type { AppointmentResponse } from '@/types/appointment';
+import { createWhatsAppLink, getAppointmentMessage } from '@/utils/whatsapp';
 
+const route = useRoute();
 const { services } = useServices();
 
 const selectedServiceId = ref('');
 const customerName = ref('');
 const customerPhone = ref('');
-const date = ref('');
-const time = ref('');
 
 const loading = ref(false);
-const result = ref<AppointmentResponse | null>(null);
 const error = ref<string | null>(null);
 
-const handleSubmit = async () => {
+// Monitorar query params para pré-seleção
+const checkServiceFromUrl = () => {
+  const serviceId = route.query.serviceId as string;
+  if (serviceId && services.value.some(s => s.id === serviceId)) {
+    selectedServiceId.value = serviceId;
+  }
+};
+
+onMounted(() => {
+  checkServiceFromUrl();
+});
+
+watch(() => route.query.serviceId, () => {
+  checkServiceFromUrl();
+});
+
+const handleSubmit = () => {
   error.value = null;
   
-  if (!selectedServiceId.value || !customerName.value || !customerPhone.value || !date.value || !time.value) {
-    error.value = 'Por favor, preencha todos os campos.';
+  if (!selectedServiceId.value) {
+    error.value = 'Por favor, selecione um serviço.';
     return;
+  }
+
+  // Validação básica se campos forem preenchidos (opcionais para UX rápida, mas ideais para mensagem)
+  // Vamos manter obrigatórios para ter uma mensagem bonita
+  if (!customerName.value) {
+     error.value = 'Por favor, digite seu nome.';
+     return;
   }
 
   loading.value = true;
 
   try {
-    const response = await createAppointment({
-      service_id: selectedServiceId.value,
-      customer_name: customerName.value,
-      customer_phone: customerPhone.value,
-      date: date.value,
-      time: time.value,
-    });
-    result.value = response;
+    const service = services.value.find(s => s.id === selectedServiceId.value);
+    if (!service) throw new Error('Serviço não encontrado');
+
+    const message = getAppointmentMessage(service.name, customerName.value);
+    const link = createWhatsAppLink(message);
+    
+    // Abrir WhatsApp
+    window.open(link, '_blank');
+    
+    // Resetar formulário ou dar feedback visual?
+    // Vamos dar um feedback visual rápido e resetar
+    
   } catch (err) {
-    error.value = 'Erro ao realizar agendamento. Tente novamente.';
+    error.value = 'Erro ao processar. Tente novamente.';
     console.error(err);
   } finally {
     loading.value = false;
   }
 };
-
-const resetForm = () => {
-  result.value = null;
-  customerName.value = '';
-  customerPhone.value = '';
-  date.value = '';
-  time.value = '';
-  selectedServiceId.value = '';
-};
 </script>
 
 <template>
-  <!-- Se agendamento confirmado -->
-  <section v-if="result" id="agendamento" class="py-12 px-6 bg-green-50 dark:bg-green-900/10 rounded-3xl mx-4 my-8 border border-green-100 dark:border-green-800 text-center transition-colors duration-300">
-    <div class="flex justify-center mb-4">
-      <div class="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center transition-colors duration-300">
-        <CheckCircle2 class="w-8 h-8 text-green-600 dark:text-green-400" />
-      </div>
-    </div>
-    <h3 class="text-2xl font-bold text-green-800 dark:text-green-300 mb-2 transition-colors duration-300">Agendamento Confirmado!</h3>
-    <p class="text-green-700 dark:text-green-400 mb-6 transition-colors duration-300">{{ result.message }}</p>
-    <div class="bg-white dark:bg-gray-800 p-4 rounded-xl inline-block shadow-sm border border-green-100 dark:border-green-800 transition-colors duration-300">
-      <p class="text-sm text-gray-500 dark:text-gray-400">ID do Agendamento</p>
-      <p class="font-mono font-bold text-gray-800 dark:text-white">{{ result.appointment_id }}</p>
-    </div>
-    <button
-      @click="resetForm"
-      class="block mx-auto mt-8 text-green-700 dark:text-green-400 font-bold hover:underline transition-colors duration-300 cursor-pointer"
-    >
-      Realizar novo agendamento
-    </button>
-  </section>
-
-  <!-- Formulário de Agendamento -->
-  <section v-else id="agendamento" class="py-12 px-4 md:px-8 bg-white dark:bg-gray-800 max-w-4xl mx-auto rounded-3xl transition-colors duration-300">
+  <section id="agendamento" class="py-12 px-4 md:px-8 bg-white dark:bg-gray-800 max-w-4xl mx-auto rounded-3xl transition-colors duration-300">
     <div class="text-center mb-10">
       <h2 class="text-3xl font-bold font-montserrat text-gray-800 dark:text-white mb-2 transition-colors duration-300">
         Agende seu Horário
       </h2>
-      <p class="text-gray-500 dark:text-gray-400 transition-colors duration-300">Escolha o serviço e o melhor momento para você.</p>
+      <p class="text-gray-500 dark:text-gray-400 transition-colors duration-300">
+        Escolha o serviço e finalize o agendamento diretamente no WhatsApp.
+      </p>
     </div>
 
     <form @submit.prevent="handleSubmit" class="space-y-6 bg-gray-50 dark:bg-gray-900 p-6 md:p-8 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 transition-colors duration-300">
@@ -117,7 +113,7 @@ const resetForm = () => {
           </div>
         </div>
 
-        <!-- Telefone -->
+        <!-- Telefone (Opcional visualmente, mas útil se quisermos salvar no futuro, por enquanto mantemos como campo de contato) -->
         <div>
           <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 font-montserrat">Seu WhatsApp</label>
           <div class="relative">
@@ -125,35 +121,10 @@ const resetForm = () => {
             <input
               type="tel"
               v-model="customerPhone"
-              required
               class="w-full pl-12 pr-4 py-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none transition-all"
               placeholder="(00) 00000-0000"
             />
           </div>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <!-- Data -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 font-montserrat">Data Preferida</label>
-          <input
-            type="date"
-            v-model="date"
-            required
-            class="w-full p-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none transition-all"
-          />
-        </div>
-
-        <!-- Horário -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 font-montserrat">Horário Preferido</label>
-          <input
-            type="time"
-            v-model="time"
-            required
-            class="w-full p-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none transition-all"
-          />
         </div>
       </div>
 
@@ -165,12 +136,12 @@ const resetForm = () => {
       <button
         type="submit"
         :disabled="loading"
-        class="w-full bg-pink-600 text-white font-bold py-4 rounded-xl shadow-lg shadow-pink-200 dark:shadow-none hover:bg-pink-700 transition-all duration-300 active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer"
+        class="w-full bg-green-600 text-white font-bold py-4 rounded-xl shadow-lg hover:bg-green-700 transition-all duration-300 active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer"
       >
         <Loader2 v-if="loading" class="animate-spin" :size="20" />
         <span v-else class="flex items-center gap-2">
-          <Check :size="20" />
-          Confirmar Agendamento
+          <Send :size="20" />
+          Enviar Mensagem no WhatsApp
         </span>
       </button>
     </form>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, watch, onUnmounted } from 'vue';
+import { useRouter } from 'vue-router';
 import { X, ChevronLeft, ChevronRight, Clock, Banknote, Calendar, CheckCircle, AlertCircle } from 'lucide-vue-next';
 import type { Service } from '@/types/service';
 
@@ -12,6 +13,7 @@ const emit = defineEmits<{
   (e: 'close'): void;
 }>();
 
+const router = useRouter();
 const currentImageIndex = ref(0);
 const isPaused = ref(false);
 let timer: ReturnType<typeof setInterval> | null = null;
@@ -68,8 +70,12 @@ const onClose = () => {
   emit('close');
 };
 
-const scrollToAppointment = () => {
+const scrollToAppointment = async () => {
   onClose();
+  
+  // Atualiza a URL com o ID do serviço para pré-seleção
+  await router.push({ query: { serviceId: props.service.id }, hash: '#agendamento' });
+
   // Pequeno delay para permitir que a modal feche antes de rolar
   setTimeout(() => {
     const element = document.getElementById('agendamento');

@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { MessageCircle, Instagram, Calendar } from 'lucide-vue-next';
+import { createWhatsAppLink, getGeneralContactMessage } from '@/utils/whatsapp';
+
+const whatsappLink = createWhatsAppLink(getGeneralContactMessage());
 
 const scrollToAppointment = (e: Event) => {
   e.preventDefault();
@@ -15,7 +18,7 @@ const scrollToAppointment = (e: Event) => {
     <div class="flex justify-between items-center gap-3">
       <!-- WhatsApp Button -->
       <a
-        href="https://wa.me/5595991522205" 
+        :href="whatsappLink" 
         target="_blank"
         rel="noopener noreferrer"
         class="flex-1 flex flex-col items-center justify-center py-3 px-2 rounded-xl bg-green-50 dark:bg-green-900/20 hover:bg-green-100 dark:hover:bg-green-900/30 border border-green-100 dark:border-green-800 transition-all duration-300 group shadow-sm hover:shadow-md cursor-pointer"

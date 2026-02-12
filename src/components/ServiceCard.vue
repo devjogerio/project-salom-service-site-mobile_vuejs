@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import { Clock, Banknote, Info, Calendar } from 'lucide-vue-next';
 import type { Service } from '@/types/service';
 import ServiceModal from './ServiceModal.vue';
@@ -8,9 +9,14 @@ const props = defineProps<{
   service: Service;
 }>();
 
+const router = useRouter();
 const isModalOpen = ref(false);
 
-const scrollToAppointment = () => {
+const scrollToAppointment = async () => {
+  // Atualiza a URL com o ID do serviço para pré-seleção
+  await router.push({ query: { serviceId: props.service.id }, hash: '#agendamento' });
+  
+  // Scroll manual caso o hash não funcione ou já esteja na página
   const element = document.getElementById('agendamento');
   element?.scrollIntoView({ behavior: 'smooth' });
 };
