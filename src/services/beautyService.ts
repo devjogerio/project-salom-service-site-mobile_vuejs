@@ -7,8 +7,8 @@ const isProd = import.meta.env.PROD;
 const REPO_BASE = import.meta.env.BASE_URL.replace(/\/$/, ''); // Remove trailing slash
 
 // Lógica de URL da API:
-// Usa VITE_API_URL se definida, senão fallback para localhost:8000
-const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
+// Valor padrão hardcoded conforme solicitado, removendo dependência de .env
+const API_URL = 'http://127.0.0.1:8000';
 
 /**
  * Serviço para buscar serviços de beleza.
@@ -50,7 +50,8 @@ export async function fetchServices(): Promise<Service[]> {
   ];
 
   // Em produção (GitHub Pages), usamos o JSON estático como fallback se não houver API configurada
-  if (isProd && !import.meta.env.VITE_API_URL) {
+  // Como removemos a dependência de variáveis de ambiente, assumimos o fallback estático em produção por padrão
+  if (isProd) {
     try {
       console.log('Modo Produção Estático: Buscando serviços do JSON local...');
       const response = await fetch(`${REPO_BASE}/services_catalog.json`);

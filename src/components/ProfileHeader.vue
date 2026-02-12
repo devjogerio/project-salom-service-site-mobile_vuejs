@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import ThemeToggle from './ThemeToggle.vue';
 import SocialActionButtons from './SocialActionButtons.vue';
 </script>
 
@@ -25,9 +24,6 @@ import SocialActionButtons from './SocialActionButtons.vue';
       <p class="text-base text-gray-500 dark:text-gray-400 max-w-sm mx-auto mt-2.5 transition-colors duration-300">
         Transformando beleza em arte. Especialista em alongamentos e design de unhas.
       </p>
-      
-      <!-- Toggle de Tema -->
-      <ThemeToggle />
 
       <!-- Botões de Ação Social (WhatsApp, Instagram, Agendar) -->
       <SocialActionButtons />

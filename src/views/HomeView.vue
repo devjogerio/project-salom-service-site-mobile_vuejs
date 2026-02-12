@@ -14,9 +14,7 @@ import ContactForm from '@/components/ContactForm.vue';
 
     <main class="flex-grow flex flex-col">
       <ProfileHeader />
-      
-      <SocialActionButtons />
-      
+            
       <div class="flex-grow space-y-4">
         <ServiceCatalog />
         <AppointmentScheduler />
