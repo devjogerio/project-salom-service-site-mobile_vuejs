@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, watch, onUnmounted } from 'vue';
-import { X, ChevronLeft, ChevronRight, Clock, Banknote } from 'lucide-vue-next';
+import { X, ChevronLeft, ChevronRight, Clock, Banknote, Calendar, CheckCircle, AlertCircle } from 'lucide-vue-next';
 import type { Service } from '@/types/service';
 
 const props = defineProps<{
@@ -67,6 +67,15 @@ const onClose = () => {
   stopRotation();
   emit('close');
 };
+
+const scrollToAppointment = () => {
+  onClose();
+  // Pequeno delay para permitir que a modal feche antes de rolar
+  setTimeout(() => {
+    const element = document.getElementById('agendamento');
+    element?.scrollIntoView({ behavior: 'smooth' });
+  }, 100);
+};
 </script>
 
 <template>
@@ -87,7 +96,7 @@ const onClose = () => {
           <div 
             v-for="(img, index) in images"
             :key="index"
-            class="absolute inset-0 transition-opacity duration-700 ease-in-out"
+            class="absolute inset-0 transition-opacity duration-500 ease-in-out"
             :class="index === currentImageIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'"
           >
             <img
@@ -192,12 +201,23 @@ const onClose = () => {
           </div>
         </div>
 
-        <button 
-          @click="onClose"
-          class="w-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 font-bold py-3 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors active:scale-95 cursor-pointer"
-        >
-          Fechar
-        </button>
+        <div class="mt-auto pt-4 flex gap-3">
+          <button 
+            @click="scrollToAppointment"
+            class="flex-1 bg-pink-50 dark:bg-pink-900/20 text-pink-700 dark:text-pink-300 font-bold py-3 rounded-xl hover:bg-pink-100 dark:hover:bg-pink-900/40 transition-colors active:scale-95 text-sm flex items-center justify-center gap-1.5 cursor-pointer"
+          >
+            <Calendar :size="16" />
+            Agendar
+          </button>
+          
+          <button 
+            @click="onClose"
+            class="flex-1 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 font-bold py-3 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors active:scale-95 text-sm flex items-center justify-center gap-1.5 cursor-pointer"
+          >
+            <X :size="16" />
+            Fechar
+          </button>
+        </div>
       </div>
     </div>
   </div>
